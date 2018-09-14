@@ -1,8 +1,7 @@
 
 <template>
   <div>
-    <h1 v-if="title">{{ title }}</h1>
-
+    
     <!-- Using indx as key instead of r.id because the ids are not always unique -->
     <div v-for="(r, indx) in groups" :key="indx" class="recommendation-group">
       <h2 v-if="(r.attributes.title || {}).stringForDisplay">{{ r.attributes.title.stringForDisplay }}</h2>

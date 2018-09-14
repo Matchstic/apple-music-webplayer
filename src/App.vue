@@ -13,10 +13,15 @@
     </b-alert>
 
     <div id="app" v-if="musicKit">
-      <!-- Header -->
-      <Header />
+      <!-- Navigation -->
+      <Navigation />
 
-      <b-container fluid>
+      <!-- Footer -->
+      <Footer :class="{ 'd-none': !isAuthorized }" />
+      
+      <router-view></router-view>
+
+      <!--<b-container fluid>
         <b-row>
           <b-col lg="3" class="mb-4">
             <b-button :class="{ 'w-100': true, 'd-none': !isAuthorized, 'd-sm-block d-md-block d-lg-none d-xl-none': isAuthorized, 'mb-4': showSidebar }" @click="showSidebar = !showSidebar">
@@ -24,22 +29,23 @@
             </b-button>
             <Sidebar :class="{ 'd-none': !showSidebar && isAuthorized, 'd-sm-none': !showSidebar && isAuthorized, 'd-md-none': !showSidebar && isAuthorized, 'd-lg-block': true, 'd-xl-block': true }" />
           </b-col>
-          <b-col lg="9">
-            <router-view></router-view>
-          </b-col>
+          <b-col lg="9">-->
+            
+          <!--</b-col>
         </b-row>
-      </b-container>
+      </b-container>-->
     </div>
+
     <!-- Waiting for MusicKit -->
     <div id="app" v-else>
-      <Header>
+      <Footer>
         <template slot="controls">
           <b-col class="text-center pt-2">
             <i class="fa fa-circle-o-notch fa-spin h2" style="font-size: 20px" aria-hidden="true" />
             <p>Initializing MusicKit JS...</p>
           </b-col>
         </template>
-      </Header>
+      </Footer>
 
       <b-container fluid>
         <b-row>
@@ -77,8 +83,9 @@ import privateConfig from './private';
 import EventBus from './event-bus';
 
 // Import custom controls
-import Header from './components/Header.vue';
 import Index from './views/Index.vue';
+import Navigation from './components/Navigation.vue';
+import Footer from './components/Footer.vue';
 import Loading from './components/Loading.vue';
 import Sidebar from './components/Sidebar.vue';
 import Recommendations from './views/Recommendations.vue';
@@ -288,19 +295,21 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0);
+  
+  document.title = 'Apple Music';
 
-  if (to.name === 'library') {
+  /*if (to.name === 'library') {
     next({ path: '/', replace: true });
     return;
-  }
+  }*/
 
-  if (to.meta.title) {
-    document.title = to.meta.title + ' | Zachary Seguin Music';
+  /*if (to.meta.title) {
+    document.title = to.meta.title;
   } else {
-    document.title = 'Zachary Seguin Music: an Apple Music web player';
-  }
+    document.title = 'Apple Music';
+  }*/
 
-  try {
+  /*try {
     let musicKit = window.MusicKit.getInstance();
 
     if (to.meta.isLibrary && !musicKit.isAuthorized) {
@@ -309,6 +318,28 @@ router.beforeEach((to, from, next) => {
     }
   } catch (err) {
     // Do nothing
+  }*/
+      
+  console.log(from)
+      
+ if (to.name === 'library') {
+      // Only if going from the main tab -> the last library page.
+      var lastLibraryPath = window.sessionStorage.librarypath;
+      if (lastLibraryPath === undefined || lastLibraryPath === '' || lastLibraryPath === null) {
+          lastLibraryPath = "/library/recently-added";
+      }
+      
+      next({ path: lastLibraryPath, replace: true });
+      return;
+  } else if (from.name === 'my-songs' ||
+              from.name === 'my-albums' ||
+              from.name === 'library-albums' ||
+              from.name === 'recently-added' ||
+              from.name === 'library-playlists' ||
+              from.name === 'my-artists' ||
+              from.name === 'library-artists') {
+      // Store library page.
+      window.sessionStorage.librarypath = from.path;
   }
 
   next();
@@ -318,10 +349,10 @@ export default {
   router,
   name: 'app',
   components: {
-    Header,
+    Navigation,
+    Footer,
     Index,
-    Loading,
-    Sidebar
+    Loading
   },
   localStorage: {
     theme: {
@@ -474,7 +505,7 @@ export default {
 <style>
 #app {
   font-size: 0.9rem;
-  padding-top: 100px;
+  padding-top: 60px;
 }
 </style>
 
@@ -504,6 +535,8 @@ body.light {
 
   background: $body-bg;
   color: $body-color;
+  padding: 0px;
+  margin: 0px;
 }
 
 // Colours for dark mode
@@ -515,6 +548,8 @@ body.dark {
 
   background: $body-bg;
   color: $body-color;
+  padding: 0px;
+  margin: 0px;
 }
 
 body.modal-open {

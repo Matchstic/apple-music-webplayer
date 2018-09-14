@@ -8,7 +8,7 @@ import App from './App.vue';
 import BootstrapVue from 'bootstrap-vue';
 
 // Load Font Awesome
-import 'font-awesome/css/font-awesome.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 // Vue.js 2 filters
 import Vue2Filters from 'vue2-filters';

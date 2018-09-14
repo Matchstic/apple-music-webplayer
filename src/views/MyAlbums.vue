@@ -3,7 +3,7 @@
   <div>
     <h1 v-if="title">{{ title }}</h1>
 
-    <SongCollectionList :items="albums" showCount countLabel="album" v-if="albums" />
+    <SongCollectionList id="collection" :items="albums" showCount countLabel="album" v-if="albums" />
     <Loading message="Loading..." v-if="loading" />
   </div>
 </template>
@@ -105,6 +105,10 @@ a:hover {
   display: block;
   padding: 1px 6px;
   color: black;
+}
+
+#collection {
+    padding-right: 15px !important;
 }
 </style>
 

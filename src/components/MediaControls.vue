@@ -6,7 +6,7 @@
         <i class="fa fa-backward" />
       </b-button>
       <b-button variant="link" class="main" v-if="[states.loading, states.waiting, states.seeking].indexOf(state) !== -1" disabled>
-        <i class="fa fa-circle-o-notch fa-spin" />
+        <i class="fas fa-circle-notch fa-spin" />
       </b-button>
       <b-button variant="link" class="main" v-on:click="play()" v-else-if="[states.paused, states.stopped, states.none].indexOf(state) !== -1" :disabled="[states.none].indexOf(state) !== -1">
         <i class="fa fa-play" />

@@ -1,35 +1,28 @@
 
 <template>
   <div class="now-playing">
+
      <div class="info">
          <img v-if="nowPlayingItem && nowPlayingItem.attributes.artwork"
               :src="nowPlayingItem.attributes.artwork | formatArtworkURL" />
          <div v-else class="placeholder" />
 
          <div class="main" v-if="nowPlayingItem">
-            <span class="title">
+            <span class="title text-muted">
               {{ nowPlayingItem.attributes.name }}
-              <b-dropdown variant="link" size="sm" no-caret boundary="viewport" v-if="isAuthorized">
-                <template slot="button-content">
-                  <i class="fa fa-ellipsis-h" /><span class="sr-only">Song actions</span>
-                </template>
-
-                <b-dropdown-item-button @click.stop="addToLibrary(nowPlayingItem)">Add to library</b-dropdown-item-button>
-                <b-dropdown-item-button @click.stop="goToAlbum(nowPlayingItem)">Go to album</b-dropdown-item-button>
-              </b-dropdown>
             </span>
             <span class="artist text-muted">{{ nowPlayingItem.attributes.artistName }} &mdash; {{ nowPlayingItem.attributes.albumName }}</span>
          </div>
          <div class="main" v-else>
-            <span class="title">Hello!</span>
+            <span class="title text-muted">Hello!</span>
             <span class="artist text-muted">Select a song, album or playlist to play.</span>
          </div>
 
-         <div class="right">
+         <div class="right" v-if="nowPlayingItem">
             <span>{{ playbackTime.currentPlaybackTime | formatSeconds }} / {{ playbackTime.currentPlaybackDuration | formatSeconds }}</span>
          </div>
 
-         <div class="queue">
+         <div class="queue" v-if="nowPlayingItem">
            <b-button variant="link" @click="showQueue = !showQueue"><i class="fa fa-list-ul" /></b-button>
            <b-modal v-model="showQueue" title="Queue" centered hide-footer>
               <b-form-radio-group v-model="queueTab"
@@ -67,9 +60,17 @@
               <p v-else class="text-center text-muted pt-4">Your queue is empty.</p>
            </b-modal>
         </div>
-      </div>
+        <div class="more" v-if="nowPlayingItem">
+            <b-dropdown variant="link" size="sm" no-caret boundary="viewport" v-if="isAuthorized">
+              <template slot="button-content">
+                <i class="fa fa-ellipsis-h" /><span class="sr-only">Song actions</span>
+              </template>
 
-      <b-progress height="2px" :value="playbackTime.currentPlaybackTime / playbackTime.currentPlaybackDuration * 100"  v-if="playbackTime.currentPlaybackDuration > 0"></b-progress>
+              <b-dropdown-item-button @click.stop="addToLibrary(nowPlayingItem)">Add to library</b-dropdown-item-button>
+              <b-dropdown-item-button @click.stop="goToAlbum(nowPlayingItem)">Go to album</b-dropdown-item-button>
+            </b-dropdown>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -193,16 +194,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+
 .now-playing {
-  border: 1px solid #e3e3e3;
-  background: white;
+  border: 0px;
   padding: 0px;
-  border-radius: 4px;
   position: relative;
-}
-.dark .now-playing {
-  border-color: #444;
-  background: #222;
+  margin-left: 10px;
 }
 
 .now-playing .info {
@@ -214,9 +211,12 @@ export default {
 }
 
 .now-playing img {
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 3px;
 }
 
 .now-playing .main {
@@ -239,7 +239,6 @@ export default {
 
 .title {
   display: block;
-  font-size: 1.2em;
 }
 
 .artist {
@@ -248,10 +247,13 @@ export default {
 
 .placeholder {
   display: block;
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
-  background: #f2f2f2;
+  margin-top: auto;
+  margin-bottom: auto;
+  background: #b2b2b2;
+  border-radius: 3px;
 }
 
 .dark .placeholder {
@@ -286,4 +288,22 @@ export default {
     flex-grow: 1;
   }
 }
+
+.more {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      box-sizing: content-box;
+      border: 2px solid transparent;
+    }
+
+    .grow-1 {
+      flex-grow: 1;
+    }
+}
+
 </style>

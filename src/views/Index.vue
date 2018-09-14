@@ -13,14 +13,6 @@
       <h2 class="h5 text-uppercase">Notice</h2>
       <p class="mb-0">This system is built on an API that is currently in beta. The application may stop working at any time.</p>
     </div>
-
-    <p>If you encounter any issues, have any feedback or feature requests,
-      please <a href="https://github.com/zachomedia/apple-music-webplayer/issues">submit an issue on GitHub</a>
-      or send an email to <a href="mailto:contact@zacharyseguin.ca">contact@zacharyseguin.ca</a>.</p>
-
-    <p class="text-muted">
-      Apple and Apple Music are trademarks of Apple Inc., registered in the U.S. and other countries
-    </p>
   </div>
 </template>
 

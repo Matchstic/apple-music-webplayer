@@ -12,7 +12,7 @@
           <div class="artwork-placeholder" v-else></div>
 
           <span>{{ item.attributes.name }}</span>
-          <span class="text-muted">{{ item.attributes.curatorName || item.attributes.artistName }}</span>
+          <span class="subtitle text-muted">{{ item.attributes.curatorName || item.attributes.artistName }}</span>
         </router-link>
         <button class="play-button" v-on:click="play(item)">
           <i class="fa fa-play"></i>
@@ -60,12 +60,13 @@ a:hover {
 .grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
+
 .grid .item {
   position: relative;
   width: 200px;
-  margin: 5px;
+  margin-bottom: 10px;
   font-size: 0.9em;
 }
 
@@ -90,14 +91,21 @@ a:hover {
   left: 10px;
   line-height: 32px;
   outline: none;
-  padding-left: 9px;
+  padding-left: 9.5px;
   position: absolute;
   top: 158px;
   width: 32px;
+  
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 .item .play-button:active {
   background-color: rgba(220, 220, 220, 0.8);
+}
+
+.item .play-button{
+    margin: auto auto;
 }
 
 .item:hover .play-button {
@@ -109,8 +117,16 @@ a:hover {
 }
 
 .item span {
-  display: block;
-  padding: 1px 6px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    padding: 2px 0px 2px 0px;
+}
+
+.item .subtitle {
+    font-size: 12px;
 }
 </style>
 

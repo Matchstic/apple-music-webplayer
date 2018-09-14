@@ -1,20 +1,8 @@
 
 <template>
   <div>
-    <b-button-group class="w-100">
-      <b-button v-if="isAuthorized"
-                variant="outline-primary"
-                class="w-50"
-                v-on:click.prevent="unauthorize()">Sign out</b-button>
-      <b-button v-if="!isAuthorized"
-                variant="primary"
-                class="w-50"
-                v-on:click.prevent="authorize()">Sign in</b-button>
-      <b-button :to="{ name: 'settings' }" variant="outline-secondary" class="w-50"><i class="fa fa-gear" /></b-button>
-    </b-button-group>
-
     <!-- Search -->
-    <h2 class="text-uppercase text-muted heading">Search</h2>
+    <!--<h2 class="text-uppercase text-muted heading">Search</h2>
     <b-form v-on:submit.prevent="search()">
       <b-form-radio-group v-model="searchParams.library"
                           v-on:input="searchScopeChange()"
@@ -32,28 +20,21 @@
                     placeholder="Search" />
 
       <b-button type="submit" class="d-none">Search</b-button>
-    </b-form>
-
-    <!-- Apple Music -->
-    <h2 class="text-uppercase text-muted heading" v-if="isAuthorized">Apple Music</h2>
-    <b-list-group class="mb-2">
-      <b-list-group-item :to="{ name: 'recommendations' }" v-if="isAuthorized">Recommendations</b-list-group-item>
-    </b-list-group>
+    </b-form>-->
 
     <!-- Library -->
     <div v-if="isAuthorized">
-      <h2 class="text-uppercase text-muted heading">My Library</h2>
       <b-list-group class="mb-2">
-        <b-list-group-item :to="{ name: 'recently-added' }" exact>Recently Added</b-list-group-item>
-        <b-list-group-item :to="{ name: 'my-songs' }" exact>Songs</b-list-group-item>
-        <b-list-group-item :to="{ name: 'my-albums' }" exact>Albums</b-list-group-item>
-        <b-list-group-item :to="{ name: 'my-artists' }" exact>Artists</b-list-group-item>
+        <b-list-group-item :to="{ name: 'recently-added' }" exact><i class="far fa-clock tab-icon" />Recent</b-list-group-item>
+        <b-list-group-item :to="{ name: 'my-artists' }" exact><i class="fas fa-microphone-alt tab-icon" />Artists</b-list-group-item>
+        <b-list-group-item :to="{ name: 'my-albums' }" exact><i class="fas fa-compact-disc tab-icon" />Albums</b-list-group-item>
+        <b-list-group-item :to="{ name: 'my-songs' }" exact><i class="fas fa-music tab-icon" />Songs</b-list-group-item>
       </b-list-group>
 
       <h3 class="text-uppercase text-muted heading">
         Playlists
         <a href="#" v-on:click.prevent="fetch()" class="pull-right">
-          <i :class="{ fa: true, 'fa-refresh': true, 'fa-spin': loading }" />
+          <i :class="{ fas: true, 'fa-sync-alt': true, 'fa-spin': loading }" />
         </a>
       </h3>
       <Playlists :playlists="playlists" />
@@ -84,12 +65,6 @@ export default {
     };
   },
   methods: {
-    authorize: function () {
-      this.musicKit.authorize();
-    },
-    unauthorize: function () {
-      this.musicKit.unauthorize();
-    },
     searchScopeChange: function () {
       this.$refs.searchInput.focus();
       if (this.searchParams.query) {
@@ -164,21 +139,48 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    a {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
 .heading {
   font-weight: normal;
   padding-top: 10px;
 }
 
-h2.heading {
-  font-size: 18px;
-}
-
 h3.heading {
-  font-size: 14px;
+  font-size: 11px;
+  padding-left: 15px;
 }
 
 .text-sm {
   font-size: 0.9em;
+}
+
+.list-group-item {
+    background-color: transparent !important;
+    color: #888 !important;
+    border: 0px !important;
+    border-radius: 0px !important;
+    font-size: 13px;
+    padding: 8px 0px 8px 5px !important;
+}
+
+.list-group-item.active {
+    background-color: rgba(150,150,150,.2) !important;
+    color: #fa3c5b !important;
+}
+
+.tab-icon {
+    padding: 0px 15px 0px 10px;
+}
+
+.fas.tab-icon, .far.tab-icon {
+    width: 38px;
+    height: 13px;
+    text-align: center;
 }
 
 .split {
@@ -187,5 +189,9 @@ h3.heading {
 
 .split label {
   width: 100%;
+}
+
+.pull-right {
+    float: right;
 }
 </style>

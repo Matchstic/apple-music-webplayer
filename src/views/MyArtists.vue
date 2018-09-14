@@ -1,8 +1,6 @@
 
 <template>
   <div>
-    <h1 v-if="title">{{ title }}</h1>
-
     <Artists :artists="artists" v-if="artists" />
     <Loading message="Loading..." v-if="loading" />
   </div>

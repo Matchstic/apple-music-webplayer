@@ -46,6 +46,9 @@ export default {
 
       this.musicKit.api.library.collection('recently-added', null, { offset: offset, limit: 10 })
         .then(r => {
+          // Remove playlists from items.
+            console.log(r[0].attributes);
+            
           if (!this.items) {
             this.items = r;
           } else {

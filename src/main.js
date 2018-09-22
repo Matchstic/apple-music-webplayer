@@ -38,6 +38,12 @@ Vue.use(Vue2Filters);
 Vue.use(VueLocalStorage);
 Vue.use(VueRouter);
 
+// vue-virtual-scroller
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+import VueVirtualScroller from "vue-virtual-scroller";
+
+Vue.use(VueVirtualScroller);
+
 new Vue({
   render: h => h(App)
 }).$mount('#app');

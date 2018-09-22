@@ -1,10 +1,10 @@
 
 <template>
-  <div>
-    <h1 v-if="title">{{ title }}</h1>
-
-    <Songs :songs="songs" v-if="songs" />
-    <Loading message="Loading..." v-if="loading" />
+  <div id="songs-container">
+    <Songs :songs="songs" :isSongsPane="true" v-if="songs" />
+    <div id="loading-container">
+        <Loading id="songs-loading" message="Loading..." />
+    </div>
   </div>
 </template>
 
@@ -26,9 +26,11 @@ export default {
   },
   data: function () {
     let musicKit = window.MusicKit.getInstance();
+    let libraryManager = window.libraryManager;
 
     return {
       musicKit: musicKit,
+      libraryManager: libraryManager,
       songs: null
     };
   },
@@ -37,6 +39,8 @@ export default {
       if (this.abort) {
         return;
       }
+      
+      //this.songs = this.libraryManager.tracks;
 
       this.loading = true;
 
@@ -75,3 +79,20 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+#songs-container {
+    padding: 0px;
+    height: 100%;
+    overflow: hidden;
+}
+#songs-loading {
+    position: absolute;
+    height: 100px;
+    top: 50%;
+}
+#loading-container {
+    position: relative;
+    height: 100vh;
+}
+</style>

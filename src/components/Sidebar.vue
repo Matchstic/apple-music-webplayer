@@ -26,9 +26,9 @@
     <div v-if="isAuthorized">
       <b-list-group class="mb-2">
         <b-list-group-item :to="{ name: 'recently-added' }" exact><i class="far fa-clock tab-icon" />Recent</b-list-group-item>
-        <b-list-group-item :to="{ name: 'my-artists' }" exact><i class="fas fa-microphone-alt tab-icon" />Artists</b-list-group-item>
-        <b-list-group-item :to="{ name: 'my-albums' }" exact><i class="fas fa-compact-disc tab-icon" />Albums</b-list-group-item>
-        <b-list-group-item :to="{ name: 'my-songs' }" exact><i class="fas fa-music tab-icon" />Songs</b-list-group-item>
+        <b-list-group-item :to="{ name: 'my-artists' }"><i class="fas fa-microphone-alt tab-icon" />Artists</b-list-group-item>
+        <b-list-group-item :to="{ name: 'my-albums' }"><i class="fas fa-compact-disc tab-icon" />Albums</b-list-group-item>
+        <b-list-group-item :to="{ name: 'my-songs' }"><i class="fas fa-music tab-icon" />Songs</b-list-group-item>
       </b-list-group>
 
       <h3 class="text-uppercase text-muted heading">
@@ -38,6 +38,8 @@
         </a>
       </h3>
       <Playlists :playlists="playlists" />
+      
+      <div class="column-spacer"></div>
     </div>
   </div>
 </template>
@@ -193,5 +195,8 @@ h3.heading {
 
 .pull-right {
     float: right;
+}
+.column-spacer {
+    height: 60px;
 }
 </style>

@@ -1,25 +1,38 @@
 
 <template>
-    <b-container fluid>
-      <b-row>
-        <b-col cols="2" class="sidebar column">
-          <Sidebar class="column" :class="{ 'd-none': false, 'd-sm-none': false, 'd-md-none': false, 'd-lg-block': true, 'd-xl-block': true }" />
-        </b-col>
-        <b-col cols="10" class="column">
-          <router-view></router-view>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+    <div class="library-container">
+        <div id="library-loading" v-if="!libraryManager">
+          <Loading message="Building library..." />
+        </div>
+        <Sidebar v-if="libraryManager" class="column left" />
+        <router-view v-if="libraryManager" class="column right"></router-view>
+    </div>
 </template>
 
 <script>
 import Sidebar from '../components/Sidebar.vue';
+import Loading from '../components/Loading.vue';
 
 export default {
   name: 'Me',
     components: {
         Sidebar,
+        Loading
+    },
+    data: function () {
+        return {
+            libraryManager: null
+        };  
+    },
+    created: function () {
+        var self = this;
+        window.libraryManager.refreshLibrary(window.MusicKit.getInstance(), function (percentComplete) {
+            console.log(percentComplete);
+        }, function (success) {
+            if (success) {
+                self.libraryManager = window.libraryManager; // Hides the loading indicator
+            }
+        });
     }
 };
 
@@ -28,15 +41,39 @@ export default {
 
 <style scoped lang="scss">
 
-.sidebar {
-    margin-left: 0px !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
+.library-container {
+    display: flex;
+    padding: 0px;
+    width: 100%;
+    min-height: 100%;
 }
     
 .column {
-    overflow: hidden;
-    overflow-y: scroll;   
+    overflow: auto;
+    overflow-y: scroll;  
+    max-height: 100vh;
 }
-  
+
+.column.left {
+    width: 15%;
+    padding-top: 60px;
+    padding-right: 10px;
+}
+
+.column.right {
+    width: 85%;
+    background-color: #fff;
+} 
+
+.dark .column.right {
+    background-color: #111;
+}
+
+#library-loading {
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+}
 </style>

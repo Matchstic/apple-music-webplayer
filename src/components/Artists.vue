@@ -1,15 +1,16 @@
 
 <template>
   <div>
-    <div class="grid">
-      <div class="item" v-for="artist in artists" :key="artist.id">
-        <router-link :to="{ name: artist.type, params: { id: artist.id } }">
-          <span>{{ artist.attributes.name }}</span>
-        </router-link>
-      </div>
-    </div>
-    
-    <p id="count" class="text-muted">{{ artists.length }} {{ artists.length | pluralize('artist') }}</p>
+      <b-list-group class="mb-2">
+          <b-list-group-item
+            v-for="artist in artists"
+            v-bind:key="artist.id"
+            href="#"
+            :to="{ name: artist.type, params: { id: artist.id } }">
+            <span class="title">{{ artist.attributes.name }}</span>
+          </b-list-group-item>
+      </b-list-group>
+      <div class="column-spacer"></div>
   </div>
 </template>
 
@@ -49,4 +50,30 @@ export default {
     text-align: center;
 }
 
+a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-sm {
+  font-size: 0.9em;
+}
+
+.list-group-item {
+    background-color: transparent !important;
+    color: #888 !important;
+    border: 0px !important;
+    border-radius: 0px !important;
+    font-size: 13px;
+    padding: 8px 5px 8px 15px !important;
+}
+
+.list-group-item.active {
+    background-color: rgba(150,150,150,.2) !important;
+    color: #fa3c5b !important;
+}
+.column-spacer {
+    height: 60px;
+}
 </style>

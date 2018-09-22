@@ -1,5 +1,5 @@
 <template>
-  <div :class="theme">
+  <div :class="theme" class='body-inner'>
     <!-- Alert -->
     <b-alert v-if="alert.details"
             class="alert"
@@ -56,7 +56,7 @@
       </b-container>
     </div>
 
-    <b-container fluid>
+    <!--<b-container fluid class="copyright">
       <b-row>
         <b-col class="text-muted text-center text-sm mb-4 mt-2">
           <p class="mb-1 pb-0">Copyright &copy; 2018 &mdash; <a href="https://zacharyseguin.ca">Zachary Seguin</a></p>
@@ -68,7 +68,7 @@
           </p>
         </b-col>
       </b-row>
-    </b-container>
+    </b-container>-->
   </div>
 </template>
 
@@ -95,6 +95,7 @@ import MySongs from './views/MySongs.vue';
 import MyArtists from './views/MyArtists.vue';
 import RecentlyAdded from './views/RecentlyAdded';
 import Artist from './views/Artist.vue';
+import Album from './views/Album.vue';
 import Search from './views/Search.vue';
 import Me from './views/Me.vue';
 import NotFound from './views/NotFound.vue';
@@ -102,6 +103,7 @@ import Settings from './views/Settings.vue';
 import Debug from './views/Debug.vue';
 
 import {formatArtworkURL, formatMillis} from './utils';
+import {getLibraryManager} from './LibraryManager';
 
 // Initialize router
 const routes = [
@@ -131,7 +133,10 @@ const routes = [
     meta: {
       title: 'Recommendations',
       isLibrary: true
-    }
+    },
+    children: [
+        
+    ]
   },
   {
     name: 'library',
@@ -158,10 +163,10 @@ const routes = [
         path: 'songs',
         component: MySongs,
         props: {
-          title: 'My songs'
+          title: 'Songs',
         },
         meta: {
-          title: 'My songs',
+          title: 'Songs',
           isLibrary: true
         }
       },
@@ -170,17 +175,17 @@ const routes = [
         path: 'albums',
         component: MyAlbums,
         props: {
-          title: 'My albums'
+          title: 'Albums'
         },
         meta: {
-          title: 'My albums',
+          title: 'Albums',
           isLibrary: true
         }
       },
       {
         name: 'library-albums',
         path: 'albums/:id',
-        component: SongCollection,
+        component: Album,
         meta: {
           type: 'album',
           isLibrary: true
@@ -191,17 +196,20 @@ const routes = [
         path: 'recently-added',
         component: RecentlyAdded,
         props: {
-          title: 'Recently Added'
+          title: 'Recent'
         },
         meta: {
-          title: 'Recently Added',
+          title: 'Recent',
           isLibrary: true
         }
       },
       {
         name: 'library-playlists',
         path: 'playlists/:id',
-        component: SongCollection,
+        component: Album,
+        props: {
+            isPlaylist: true
+        },
         meta: {
           type: 'playlist',
           isLibrary: true
@@ -212,27 +220,32 @@ const routes = [
         path: 'artists',
         component: MyArtists,
         props: {
-          title: 'My artists'
+          title: 'Artists'
         },
         meta: {
-          title: 'My artists',
+          title: 'Artists',
           isLibrary: true
-        }
+        },
+        children: [
+            {
+              name: 'library-artists',
+              path: ':id',
+              component: Artist,
+              meta: {
+                isLibrary: true
+              }
+            }
+        ]
       },
-      {
-        name: 'library-artists',
-        path: 'artists/:id',
-        component: Artist,
-        meta: {
-          isLibrary: true
-        }
-      }
     ]
   },
   {
     name: 'playlists',
     path: '/playlists/:id',
-    component: SongCollection,
+    component: Album,
+      props: {
+          isPlaylist: true
+      },
     meta: {
       type: 'playlist',
       isLibrary: false
@@ -241,7 +254,7 @@ const routes = [
   {
     name: 'albums',
     path: '/albums/:id',
-    component: SongCollection,
+    component: Album,
     meta: {
       type: 'album',
       isLibrary: false
@@ -297,6 +310,21 @@ router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0);
   
   document.title = 'Apple Music';
+  
+  /*if (!window.libraryManager || !window.libraryManager.hasInitiallyLoaded) {
+      var originalPath = to.path;
+      if (window.sessionStorage.postloadpath)
+          return;
+      
+      if (originalPath === '' || originalPath === '/') {
+          originalPath = "/library/recently-added";
+      }
+      window.sessionStorage.postloadpath = originalPath;
+      
+      next({ path: '/', replace: true });
+      
+      return;
+  }*/
 
   /*if (to.name === 'library') {
     next({ path: '/', replace: true });
@@ -309,7 +337,7 @@ router.beforeEach((to, from, next) => {
     document.title = 'Apple Music';
   }*/
 
-  /*try {
+  try {
     let musicKit = window.MusicKit.getInstance();
 
     if (to.meta.isLibrary && !musicKit.isAuthorized) {
@@ -318,9 +346,7 @@ router.beforeEach((to, from, next) => {
     }
   } catch (err) {
     // Do nothing
-  }*/
-      
-  console.log(from)
+  }
       
  if (to.name === 'library') {
       // Only if going from the main tab -> the last library page.
@@ -375,6 +401,7 @@ export default {
       isAuthorized: false,
 
       musicKit: null,
+      libraryManager: null,
       alert: {
         details: null,
         countdown: 0
@@ -418,6 +445,9 @@ export default {
       });
 
       initialize();
+      
+      // Data manager
+      window.libraryManager = getLibraryManager();
     };
 
     let initialize = () => {
@@ -505,7 +535,9 @@ export default {
 <style>
 #app {
   font-size: 0.9rem;
-  padding-top: 60px;
+  line-height: 1.1rem;
+  overflow-y: auto;
+  height: 100%;
 }
 </style>
 
@@ -520,11 +552,24 @@ export default {
 .text-sm {
   font-size: 0.8em;
 }
+.copyright {
+    margin-bottom: 20px;
+}
 </style>
 
 <style lang="scss">
+html {
+    height: 100%;
+}
+
+.body-inner {
+    height: 100%;
+}
+
 body {
   font-family: sans-serif;
+  overflow: hidden;
+  height: 100%;
 }
 
 body.light {
@@ -560,4 +605,5 @@ body.modal-open {
     overflow-y: scroll;
   }
 }
+
 </style>

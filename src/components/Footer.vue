@@ -67,7 +67,7 @@ export default {
   font-size: 0.9em;
   padding: 8px 5px;
 
-  border-top: 1.5px solid rgba(0, 0, 0, .2);
+  border-top: 1px solid rgba(0, 0, 0, .2);
 
   display: flex;
   align-items: center;

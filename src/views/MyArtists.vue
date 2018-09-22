@@ -1,9 +1,11 @@
 
 <template>
-  <div>
-    <Artists :artists="artists" v-if="artists" />
-    <Loading message="Loading..." v-if="loading" />
-  </div>
+    <div>
+        <div class="artists-container">
+            <Artists class="sidebar column" :artists="artists" v-if="artists" />
+            <router-view class="content column"></router-view>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -24,9 +26,11 @@ export default {
   },
   data: function () {
     let musicKit = window.MusicKit.getInstance();
+    let libraryManager = window.libraryManager;
 
     return {
       musicKit: musicKit,
+      libraryManager: libraryManager,
       artists: null
     };
   },
@@ -35,8 +39,11 @@ export default {
       if (this.abort) {
         return;
       }
+      
+      this.artists = this.libraryManager.artists;
 
-      this.loading = true;
+      /*this.loading = true;
+      
 
       if (!offset) {
         offset = 0;
@@ -62,7 +69,7 @@ export default {
             type: 'danger',
             message: `An unexpected error occurred.`
           });
-        });
+        });*/
     }
   },
   created: function () {
@@ -73,3 +80,29 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+    .artists-container {
+        display: flex;
+        padding: 0px;
+        margin-left: 0px;
+    }
+    
+    .sidebar {
+        width: 17%;
+        padding-top: 60px;
+        padding-right: 10px;
+    }  
+    
+    .content {
+        flex-grow: 100;
+        margin: 0px;
+        padding-top: 60px;
+    }
+    
+    .column {
+        overflow: auto;
+        overflow-y: scroll;  
+        max-height: 100vh;
+    }  
+</style>

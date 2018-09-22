@@ -71,7 +71,7 @@ export default {
       api[this.$route.meta.type](this.$route.params.id).then(r => {
         this.collection = r;
 
-        document.title = this.collection.attributes.name + ' | Zachary Seguin Music';
+        document.title = this.collection.attributes.name;
 
         // Workaround to load all songs
         let fetchTracks = (url) => {

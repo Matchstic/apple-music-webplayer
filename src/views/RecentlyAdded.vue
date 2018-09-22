@@ -1,9 +1,7 @@
 
 <template>
-  <div>
-    <h1 v-if="title">{{ title }}</h1>
-
-    <SongCollectionList :items="items" showCount countLabel="item" v-if="items" />
+  <div id="recents-container">
+    <SongCollectionList id="collection" :items="items" countLabel="item" v-if="items" />
     <Loading message="Loading..." v-if="loading" />
   </div>
 </template>
@@ -81,6 +79,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  h1 {
+    line-height: 2.5rem;
+  }
+    
   a:hover {
     text-decoration: none;
   }
@@ -108,6 +110,18 @@ export default {
     display: block;
     padding: 1px 6px;
     color: black;
+  }
+  #recents-container {
+      padding-top: 60px;
+  }
+  #recents-container:after {
+      content: "";
+      height: 60px;
+      display: block;
+  }
+  #collection {
+      padding-right: 30px !important;
+      padding-left: 30px !important;
   }
 </style>
 

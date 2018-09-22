@@ -1,11 +1,11 @@
 <template>
-  <div class="navigation container-fluid" v-bind:class="active" v-on:click.prevent>
+  <div class="navigation container-fluid" v-on:click.prevent>
       <div class="background"></div>
       <div class="navigation-items">
       </div>
       <div class="navigation-items">
-          <b-button :variant="primary" :type="button" v-bind:to="{ name: 'library' }">Library</b-button>
-          <b-button :variant="primary" :type="button" v-bind:to="{ name: 'recommendations' }">For You</b-button>
+          <b-button v-bind:to="{ name: 'library' }">Library</b-button>
+          <b-button v-bind:to="{ name: 'recommendations' }">For You</b-button>
       </div>
       <div class="navigation-items">
           <b-button :to="{ name: 'settings' }" variant="primary-fade"><i class="fas fa-cog" /></b-button>
@@ -43,7 +43,7 @@ export default {
   padding: 0px;
   margin: 0;
 
-  border-bottom: 1.5px solid rgba(0, 0, 0, .2);
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
   background-color: rgba(210, 210, 210, 0.6);
 
   display: flex;

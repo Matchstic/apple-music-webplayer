@@ -1,10 +1,7 @@
 
 <template>
-  <div>
-    <h1 v-if="title">{{ title }}</h1>
-
-    <SongCollectionList id="collection" :items="albums" showCount countLabel="album" v-if="albums" />
-    <Loading message="Loading..." v-if="loading" />
+  <div id="albums-container">
+    <SongCollectionList id="collection" :items="albums" countLabel="album" v-if="albums" />
   </div>
 </template>
 
@@ -26,9 +23,11 @@ export default {
   },
   data: function () {
     let musicKit = window.MusicKit.getInstance();
+    let libraryManager = window.libraryManager;
 
     return {
       musicKit: musicKit,
+      libraryManager: libraryManager,
       albums: null
     };
   },
@@ -37,8 +36,10 @@ export default {
       if (this.abort) {
         return;
       }
+      
+      this.albums = this.libraryManager.albums;
 
-      this.loading = true;
+      /*this.loading = true;
 
       if (!offset) {
         offset = 0;
@@ -64,7 +65,7 @@ export default {
             type: 'danger',
             message: `An unexpected error occurred.`
           });
-        });
+        });*/
     }
   },
   created: function () {
@@ -78,6 +79,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    
+h1 {
+    line-height: 2.5rem;
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -108,7 +114,17 @@ a:hover {
 }
 
 #collection {
-    padding-right: 15px !important;
+    padding-right: 30px !important;
+    padding-left: 30px !important;
+}
+
+#albums-container {
+    padding-top: 60px;
+}
+#albums-container:after {
+    content: "";
+    height: 60px;
+    display: block;
 }
 </style>
 

@@ -58,23 +58,24 @@ a:hover {
 }
 
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-column-gap: 20px;
 }
 
 .grid .item {
   position: relative;
-  width: 200px;
+  width: 100%;
   margin-bottom: 10px;
   font-size: 0.9em;
 }
 
 .item img, .artwork-placeholder {
   display: block;
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
   border-radius: 4px;
   margin-bottom: 4px;
   box-shadow: 0 0 1px rgba(0, 0, 0, .4);
@@ -93,7 +94,7 @@ a:hover {
   outline: none;
   padding-left: 9.5px;
   position: absolute;
-  top: 158px;
+  bottom: 57px;
   width: 32px;
   
   padding-top: 1px;
